@@ -30,10 +30,6 @@ def get_app_links(url)
   end
 end
 
-def save_application_link(url)
-  ApplicationLink.upsert({url: url, last_seen_in_category: Time.now}, unique_by: :url)
-end
-
 def scrape_next_category
   category = Category.order(last_scraped_at: :asc).first
   category.last_page_scraped += 1
@@ -42,7 +38,7 @@ def scrape_next_category
   
   app_links = get_app_links(category.url + "?page=#{category.last_page_scraped}")
   if app_links
-    app_links.each { |link| save_application_link(link) }
+    ApplicationLink.upsert_all(app_links.map { |link| {url: link, last_seen_in_category: Time.now} }, unique_by: :url)
   else
     # in case of an error reset last_page_scraped, to start from the beginning
     category.last_page_scraped = 0
