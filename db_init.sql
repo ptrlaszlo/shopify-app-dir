@@ -1,21 +1,22 @@
 CREATE TABLE IF NOT EXISTS "categories" (
   "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+  "name" varchar NOT NULL,
   "url" varchar NOT NULL,
   "last_page_scraped" integer default 0,
   "last_scraped_at" datetime
 );
 
-INSERT INTO "categories" (url) values
-("https://apps.shopify.com/browse/all"),
-("https://apps.shopify.com/browse/store-design"),
-("https://apps.shopify.com/browse/conversion"),
-("https://apps.shopify.com/browse/marketing"),
-("https://apps.shopify.com/browse/store-management"),
-("https://apps.shopify.com/browse/fulfillment"),
-("https://apps.shopify.com/browse/customer-service"),
-("https://apps.shopify.com/browse/merchandising"),
-("https://apps.shopify.com/browse/shipping-and-delivery"),
-("https://apps.shopify.com/browse/sourcing-and-selling-products");
+INSERT INTO "categories" (name, url) values
+("all", "https://apps.shopify.com/browse/all"),
+("store-design", "https://apps.shopify.com/browse/store-design"),
+("conversion", "https://apps.shopify.com/browse/conversion"),
+("marketing", "https://apps.shopify.com/browse/marketing"),
+("store-management", "https://apps.shopify.com/browse/store-management"),
+("fulfillment", "https://apps.shopify.com/browse/fulfillment"),
+("customer-service", "https://apps.shopify.com/browse/customer-service"),
+("merchandising", "https://apps.shopify.com/browse/merchandising"),
+("shipping-and-delivery", "https://apps.shopify.com/browse/shipping-and-delivery"),
+("sourcing-and-selling-products", "https://apps.shopify.com/browse/sourcing-and-selling-products");
 
 CREATE TABLE IF NOT EXISTS "application_links" (
   "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
