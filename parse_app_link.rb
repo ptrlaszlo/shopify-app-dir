@@ -18,9 +18,9 @@ def parse_app_details(doc)
 
   doc.css('.reviews-summary__rating-breakdown').each do |rating|
     number_of_stars = rating.css('.ui-star-rating').first["data-rating"]
-    number_of_ratings = rating.css('.reviews-summary__review-count a').first.content.delete_prefix("(").delete_suffix(")")
+    number_of_ratings = rating.css('.reviews-summary__review-count a')&.first&.content&.delete_prefix("(")&.delete_suffix(")")
 
-    attributes[number_of_stars] = number_of_ratings
+    attributes[number_of_stars] = number_of_ratings || "0"
   end
 
   categories = doc.css('.ui-app-store-hero__container .ui-app-store-hero__kicker a').map do |category|

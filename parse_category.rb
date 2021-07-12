@@ -30,6 +30,18 @@ def get_app_links(url)
   end
 end
 
+def save_application_link(url)
+  existing_item = ApplicationLink.find_by_url(url)
+  # upsert wasn't working on the server for some reason
+  if existing_item
+    existing_item.last_seen_in_category = Time.now
+    existing_item.save!
+  else
+    item = ApplicationLink.new({url: url, last_seen_in_category: Time.now})
+    item.save!
+  end
+end
+
 def scrape_next_category
   category = Category.order(last_scraped_at: :asc).first
   category.last_page_scraped += 1
@@ -38,7 +50,7 @@ def scrape_next_category
   
   app_links = get_app_links(category.url + "?page=#{category.last_page_scraped}")
   if app_links
-    ApplicationLink.upsert_all(app_links.map { |link| {url: link, last_seen_in_category: Time.now} }, unique_by: :url)
+    app_links.each { |link| save_application_link(link) }
   else
     # in case of an error reset last_page_scraped, to start from the beginning
     category.last_page_scraped = 0
